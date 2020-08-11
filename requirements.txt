@@ -1,0 +1,28 @@
+
+
+# Django
+Django==3.1
+
+
+# Django Rest Framework
+djangorestframework==3.11.1
+
+
+# Decouple
+python-decouple==3.3
+
+
+# PostgreSQL
+psycopg2==2.8.5
+
+
+# Django Rest Framework JSON WEB TOKENS
+djangorestframework-jwt==1.11.0
+
+
+# Django Environ
+django-environ==0.4.5
+
+
+# Pillow
+Pillow==7.2.0
