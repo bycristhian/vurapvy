@@ -30,7 +30,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'vurapvy.urls'
+ROOT_URLCONF = 'vurapy.urls'
 
 TEMPLATES = [
     {
@@ -48,7 +48,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'vurapvy.wsgi.application'
+WSGI_APPLICATION = 'vurapy.wsgi.application'
 
 
 # Password validation

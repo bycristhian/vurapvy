@@ -1,8 +1,8 @@
-# API Vurapvy
+# API Vurapy
 #
-#### ¿What is Vurapvy?
+#### ¿What is Vurapy?
 
-> Vurapvy is a social network for programmers where you can interact with the entire community of people passionate about technology and programming.
+> Vurapy is a social network for programmers where you can interact with the entire community of people passionate about technology and programming.
 
 
 ### Dependencies
@@ -12,7 +12,7 @@
 
 ### Installation
 
-Remember to create and configure the parameters of local enviroment in file ```.env``` into ```vurapvy/config/```:
+Remember to create and configure the parameters of local enviroment in file ```.env``` into ```vurapy/config/```:
 
 ```sh
 DEBUG=True
