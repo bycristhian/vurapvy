@@ -1,25 +1,14 @@
 
-# Django
-
-
-# Django REST Framework
+# Django Rest Framework
 from rest_framework import serializers
 
 # Serializers
 from users.serializers import UserModelSerializer
+from podcasts.serializers import TagModelSerializer
 
-# Models
-from podcasts.models import Podcast, Tag
+# Models 
+from podcasts.models import Podcast
 from django.contrib.auth.models import User
-
-
-
-
-class TagModelSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Tag
-        fields = ['id', 'name', 'created_at', 'updated_at']
 
 
 class PodcastModelSerializer(serializers.ModelSerializer):
@@ -29,7 +18,7 @@ class PodcastModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Podcast
-        fields = ['id', 'name', 'description', 'author', 'tags', 'image', 'audio', 'created_at', 'updated_at']
+        exclude = ['is_active']
 
 
 

@@ -3,22 +3,26 @@
 from django.shortcuts import render
 
 # Django REST Framework
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 
 # Serializers
-from .serializers import CreatePodcastModelSerializer, PodcastModelSerializer
+from .serializers import (CreatePodcastModelSerializer, PodcastModelSerializer, UpdateTagPodcastModelSerializer)
+
+# Permissions
+from podcasts.permissions import IsOwnerObject
 
 # Models
 from podcasts.models import Podcast
 
 
 
-class PodcastViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
+class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
     model = Podcast
-    queryset = Podcast.objects.all()
+    queryset = Podcast.objects.filter(is_active=True)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
@@ -39,5 +43,36 @@ class PodcastViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
 
         return serializer
 
+
+    @action(detail=True, methods=['put'], permission_classes=[IsOwnerObject])
+    def add_tags(self, request, *args, **kwargs):
+        serializer = UpdateTagPodcastModelSerializer(instance=self.get_object(), data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        self.update_tags(self.get_object(), serializer.validated_data['tags'], 'add')
+
+        return Response(data=PodcastModelSerializer(instance=self.get_object()).data, status=status.HTTP_200_OK)
+
+
+    @action(detail=True, methods=['put'], permission_classes=[IsOwnerObject])
+    def remove_tags(self, request, *args, **kwargs):
+        serializer = UpdateTagPodcastModelSerializer(instance=self.get_object(), data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        self.update_tags(self.get_object(), serializer.validated_data['tags'], 'remove')
+
+        return Response(data=PodcastModelSerializer(instance=self.get_object()).data, status=status.HTTP_200_OK)
+
+
+    def update_tags(self, instance: Podcast, tags, action: str):
+        if action == 'add':
+            data = [tag for tag in tags if tag not in instance.tags.all()]
+            instance.tags.add(*data)
+        elif action == 'remove':
+            data = [tag for tag in tags if tag in instance.tags.all()]
+            instance.tags.remove(*data)
+
+        instance.save()
+        return instance
 
 
