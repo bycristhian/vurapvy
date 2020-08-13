@@ -3,7 +3,7 @@
 from django.shortcuts import render
 
 # Django REST Framework
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -20,7 +20,8 @@ from podcasts.models import Podcast
 
 
 
-class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
+class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, 
+                     DestroyModelMixin, GenericViewSet):
     model = Podcast
     queryset = Podcast.objects.filter(is_active=True)
 
@@ -31,10 +32,21 @@ class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, Generic
 
         return response
 
+    def destroy(self, request, *args, **kwargs):
+        podcast: Podcast = self.get_object()
+        podcast.is_active = False
+        podcast.save()
+
+        user_podcasts = self.queryset.filter(author=self.request.user)
+        serializer = PodcastModelSerializer(instance=user_podcasts, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     def perform_create(self, serializer):
         self.podcast = serializer.save(self.request.user)
 
     def get_serializer_class(self):
+
         serializer = None
         if self.action == 'create':
             serializer = CreatePodcastModelSerializer
@@ -42,6 +54,13 @@ class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, Generic
             serializer = PodcastModelSerializer
 
         return serializer
+
+
+    def get_permissions(self):
+        permissions = super().get_permissions()
+        if self.action == 'destroy' or self.action == 'update':
+            permissions.append(IsOwnerObject())
+        return permissions
 
 
     @action(detail=True, methods=['put'], permission_classes=[IsOwnerObject])
@@ -68,6 +87,7 @@ class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, Generic
         if action == 'add':
             data = [tag for tag in tags if tag not in instance.tags.all()]
             instance.tags.add(*data)
+            
         elif action == 'remove':
             data = [tag for tag in tags if tag in instance.tags.all()]
             instance.tags.remove(*data)
