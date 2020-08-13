@@ -14,3 +14,14 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
+
+
+
+class RegisterUserModelSerializer(serializers.ModelSerializer):
+
+    email = serializers.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        read_only_fields = ['id']
