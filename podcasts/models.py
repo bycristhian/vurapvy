@@ -18,8 +18,8 @@ class Tag(models.Model):
 class Podcast(models.Model):
     name = models.CharField(max_length=35)
     description = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='all_podcasts')
-    tags = models.ManyToManyField(Tag, related_name='all_podcasts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='podcasts')
+    tags = models.ManyToManyField(Tag, related_name='podcasts_tag')
 
     image = models.ImageField(upload_to='podcasts_images', blank=False, null=False)
     audio = models.FileField(upload_to='podcasts_audio', blank=False, null=False)

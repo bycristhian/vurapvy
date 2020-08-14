@@ -1,12 +1,20 @@
 
 
 # Django
-from django.urls import path
+from django.urls import path, include
+
+# Django REST Framework
+from rest_framework import routers
 
 # Views
-from users.views import RegisterUserView
+from users.views import RegisterUserView, UserViewSet
+
+
+router = routers.SimpleRouter()
+router.register(r'users', UserViewSet)
 
 
 urlpatterns = [
-    path('register/', RegisterUserView.as_view(), name='register_user')
+    path('register/', RegisterUserView.as_view(), name='register_user'),
+    path('', include(router.urls), name='viewset_users')
 ]
