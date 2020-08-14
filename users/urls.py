@@ -13,6 +13,8 @@ from users.views import RegisterUserView, UserViewSet
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 
+print(router.urls)
+
 
 urlpatterns = [
     path('register/', RegisterUserView.as_view(), name='register_user'),
