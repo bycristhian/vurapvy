@@ -7,16 +7,15 @@ from django.urls import path, include
 from rest_framework import routers
 
 # Views
-from users.views import RegisterUserView, UserViewSet
+from users.views import RegisterUserView, UserViewSet, ObtainJSONWebTokenView
 
 
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 
-print(router.urls)
-
 
 urlpatterns = [
     path('register/', RegisterUserView.as_view(), name='register_user'),
+    path('login/', ObtainJSONWebTokenView.as_view(), name='login_user'),
     path('', include(router.urls), name='viewset_users')
 ]

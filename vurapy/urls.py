@@ -13,7 +13,6 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', obtain_jwt_token, name='obtain_jwt'),
     path('api-token-verify/', verify_jwt_token, name='verify_jwt'),
 
     path('', include(('podcasts.urls', 'podcasts'), namespace='podcasts')),
