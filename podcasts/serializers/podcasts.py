@@ -24,9 +24,12 @@ class PodcastModelSerializer(serializers.ModelSerializer):
 
 class CreatePodcastModelSerializer(serializers.ModelSerializer):
 
+    tags = TagModelSerializer(many=True, read_only=True)
+
     class Meta:
         model = Podcast
-        fields = ['name', 'description', 'image', 'audio']
+        fields = ['id', 'name', 'description', 'image', 'audio', 'tags', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'tags', 'created_at', 'updated_at']
 
 
     def save(self, author: User):

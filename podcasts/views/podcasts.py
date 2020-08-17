@@ -3,7 +3,8 @@
 from django.shortcuts import render
 
 # Django REST Framework
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import (CreateModelMixin, ListModelMixin, UpdateModelMixin, DestroyModelMixin,
+                                   RetrieveModelMixin)
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -21,7 +22,7 @@ from podcasts.models import Podcast
 
 
 class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin, 
-                     DestroyModelMixin, GenericViewSet):
+                     DestroyModelMixin, RetrieveModelMixin, GenericViewSet):
     model = Podcast
     queryset = Podcast.objects.filter(is_active=True)
 
@@ -50,7 +51,7 @@ class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin,
         serializer = None
         if self.action == 'create':
             serializer = CreatePodcastModelSerializer
-        elif self.action == 'list':
+        elif self.action == 'list' or self.action == 'retrieve':
             serializer = PodcastModelSerializer
 
         return serializer
