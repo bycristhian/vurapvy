@@ -38,9 +38,6 @@ class RegisterUserView(CreateAPIView):
 class ObtainJSONWebTokenView(ObtainJSONWebToken):
     permission_classes = []
 
-    def get_permissions(self):
-        return []
-
 
 class UserViewSet(RetrieveModelMixin, GenericViewSet):
     queryset = User.objects.all()

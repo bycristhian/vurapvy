@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Serializers
-from .serializers import (CreatePodcastModelSerializer, PodcastModelSerializer, UpdateTagPodcastModelSerializer)
+from podcasts.serializers import (CreatePodcastModelSerializer, PodcastModelSerializer, UpdateTagPodcastModelSerializer)
 
 # Permissions
 from podcasts.permissions import IsOwnerObject
@@ -94,5 +94,3 @@ class PodcastViewSet(CreateModelMixin, ListModelMixin, UpdateModelMixin,
 
         instance.save()
         return instance
-
-

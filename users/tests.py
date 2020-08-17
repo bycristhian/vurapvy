@@ -14,11 +14,12 @@ class UserTestCase(APITestCase):
 
     def setUp(self):
         self.url_register = reverse_lazy('users:register_user')
+        self.url_login = reverse_lazy('users:login_user')
 
-        self.user1 = User.objects.create(username='cristhian', email='user1@gmail.com', password='user123')
+        self.user1 = User.objects.create_user(username='cristhian', email='user1@gmail.com', password='user123')
         Profile.objects.create(user=self.user1)
 
-        self.user2 = User.objects.create(username='camila', email='user2@gmail.com', password='user123')
+        self.user2 = User.objects.create_user(username='camila', email='user2@gmail.com', password='user123')
         Profile.objects.create(user=self.user2)
 
         self.url_follow_user = reverse_lazy('users:user-follow', kwargs={'username': self.user2.username})
@@ -37,6 +38,15 @@ class UserTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(User.objects.all().count(), 3)
+
+
+    def test_login_user(self):
+        response = self.client.post(self.url_login, data={
+            'username': 'cristhian',
+            'password': 'user123'
+        }, format='json')
+        
+        self.assertEqual(response.status_code, 200)
 
 
     def test_username_already_exists(self):
