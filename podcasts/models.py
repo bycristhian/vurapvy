@@ -14,7 +14,6 @@ class Tag(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-
 class Podcast(models.Model):
     name = models.CharField(max_length=35)
     description = models.TextField()
@@ -25,5 +24,14 @@ class Podcast(models.Model):
     audio = models.FileField(upload_to='podcasts_audio', blank=False, null=False)
 
     is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Comment(models.Model):
+    description = models.CharField(max_length=160, null=False, blank=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='commets_podcast')
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='comments')
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
