@@ -18,6 +18,12 @@ DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS', default=['*']))
 
+INSTALLED_APPS += ['corsheaders']
+
+MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
